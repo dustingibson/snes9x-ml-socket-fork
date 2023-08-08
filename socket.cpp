@@ -164,13 +164,19 @@ void ProcessToController(std::vector<unsigned char> data)
 				{
 					cnt++;
 					std::cout << "Detected controller!" << std::endl;
+                    std::vector<int> allControls;
 
-					int curControl = GetInt(data, cnt);
-                    cnt += 4;
+                    // Peak into the next two bytes, is it end of it or holding more buttons?
+                    while(data[cnt+2] != 2)
+                    {
+					    allControls.push_back(GetInt(data, cnt));
+                        cnt += 4;
+                    }
+
                     int curFrame = GetInt16(data, cnt);
                     cnt += 2;
 
-                    SocketControl socketControl = { curControl, curFrame};
+                    SocketControl socketControl = { allControls, curFrame};
                     ControlsQueue.push_back(socketControl);
 				}
 				break;

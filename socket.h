@@ -4,7 +4,7 @@
 #include <vector>
 
 struct SocketControl {
-    int control;
+    std::vector<int> controls;
     int frames;
 };
 

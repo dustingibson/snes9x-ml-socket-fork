@@ -248,7 +248,8 @@ void ReportToController(bool buttonPushed)
 {
 	std::vector<SocketControl> buffer = GetControlsQueue();
 	for (int i = 0; i < buffer.size(); i++) {
-		S9xReportButton(buffer[i].control, buttonPushed);
+		for (int j = 0; j < buffer[i].controls.size(); j++)
+			S9xReportButton(buffer[i].controls[j], buttonPushed);
 	}
 }
 
@@ -257,8 +258,10 @@ void ClearReportToController()
 	ReduceFrame();
 	std::vector<SocketControl> buffer = UnpressedControls();
 	for (int i = 0; i < buffer.size(); i++) {
-		std::cout << "UNPRESSED BUTTON" << std::endl;
-		S9xReportButton(buffer[i].control, false);
+		for (int j = 0; j < buffer[i].controls.size(); j++) {
+			std::cout << "UNPRESSED BUTTON" << std::endl;
+			S9xReportButton(buffer[i].controls[j], false);
+		}
 	}
 	EmptyControllerQueue();
 }
