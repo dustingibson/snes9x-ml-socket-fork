@@ -24,6 +24,7 @@
 #endif
 
 static inline void S9xReschedule (void);
+int CaptureCnt = 0;
 
 void S9xMainLoop (void)
 {
@@ -224,23 +225,26 @@ char* FromRAMToChar()
 	
 	// P1 X
 	someChar[0] = Memory.RAM[0x2bbc];
+	// P1 Page X
+	someChar[1] = Memory.RAM[0x2bbd];
 	// P2 X
-	someChar[1] = Memory.RAM[0x3daa];
+	someChar[2] = Memory.RAM[0x2bbe];
+	// P2 Page X
+	someChar[3] = Memory.RAM[0x2bbf];
 	// P1 Y
-	someChar[2] = Memory.RAM[0x2c74];
+	someChar[4] = Memory.RAM[0x2c74];
 	// P2 Y
-	someChar[3] = Memory.RAM[0x2c76];
+	someChar[5] = Memory.RAM[0x2c76];
 	// P1 Ducks (States Really...)
-	someChar[4] = Memory.RAM[0x0927];
+	someChar[6] = Memory.RAM[0x0927];
 	// P2 Ducks (States Really...)
-	someChar[5] = Memory.RAM[0x0627];
-	// Facing [hex(00) means P1 left, P2 Right. Oppisite for hex(40)]
+	someChar[7] = Memory.RAM[0x0627];
 	//someChar[6] = Memory.RAM[0x]
 	// P1 Health
-	someChar[6] = Memory.RAM[0x36d4];
+	someChar[8] = Memory.RAM[0x36d4];
 	// P2 Health
-	someChar[7] = Memory.RAM[0x3898];
-	// -----------------------------------------------
+	someChar[9] = Memory.RAM[0x3898];
+
 	return someChar;
 }
 
@@ -248,8 +252,12 @@ void ReportToController(bool buttonPushed)
 {
 	std::vector<SocketControl> buffer = GetControlsQueue();
 	for (int i = 0; i < buffer.size(); i++) {
-		for (int j = 0; j < buffer[i].controls.size(); j++)
-			S9xReportButton(buffer[i].controls[j], buttonPushed);
+		for (int j = 0; j < buffer[i].controls.size(); j++) {
+			// Let's write
+			if (buffer[i].controls[j] == 1234) {}
+			else
+				S9xReportButton(buffer[i].controls[j], buttonPushed);
+		}
 	}
 }
 
@@ -259,6 +267,13 @@ void ClearReportToController()
 	std::vector<SocketControl> buffer = UnpressedControls();
 	for (int i = 0; i < buffer.size(); i++) {
 		for (int j = 0; j < buffer[i].controls.size(); j++) {
+			// Let's write
+			if (buffer[i].controls[j] == 1234) {
+				std::ofstream file("./out/DUMP_" + std::to_string(CaptureCnt) + ".bin", std::ios::binary);
+				CaptureCnt++;
+  				file.write((const char*)Memory.RAM, 65535);
+				std::cout << "WRITING" << std::endl;
+			}
 			std::cout << "UNPRESSED BUTTON" << std::endl;
 			S9xReportButton(buffer[i].controls[j], false);
 		}

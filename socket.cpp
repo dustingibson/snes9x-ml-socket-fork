@@ -60,12 +60,12 @@ int SocketInit()
 
     if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service,  NI_MAXSERV, 0) == 0)
     {
-        printf("Connected on port %s", service);
+        //printf("Connected on port %s", service);
     }
     else
     {
         inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-        printf("Connected on port %i", ntohs(client.sin_port));
+        //printf("Connected on port %i", ntohs(client.sin_port));
     }
     close(listening);
     
@@ -74,8 +74,9 @@ int SocketInit()
 
 void Send(const char* buf)
 {
+    int size = 15;
     frame++;
-    send(ClientSocket, buf, sizeof(buf), 0);
+    send(ClientSocket, buf, sizeof(buf)*size, 0);
 }
 
 int GetSocketFrame()
@@ -194,4 +195,6 @@ void ProcessToController(std::vector<unsigned char> data)
 				break;
 		}
 	}
+
+    // TODO: Safetly close out of socket when snes9x closes
 }
