@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <ctype.h>
+#include "socket.h"
 
 #include "snes9x.h"
 #include "memmap.h"
@@ -302,6 +303,7 @@ static int32 ApplyMulti (s9xcommand_t *, int32, int16);
 static void do_polling (int);
 static void UpdatePolledMouse (int);
 
+int LastFrame = 0;
 
 static string& operator += (string &s, int i)
 {
@@ -1708,6 +1710,13 @@ bool S9xMapButton (uint32 id, s9xcommand_t mapping, bool poll)
 
 void S9xReportButton (uint32 id, bool pressed)
 {
+	if (id == 4321)
+		return;
+	if (pressed ) {
+		std::cout << GetSocketFrame() - LastFrame;
+		std::cout << " " + id << std::endl;
+		LastFrame = GetSocketFrame();
+	}
 	if (keymap.count(id) == 0)
 		return;
 

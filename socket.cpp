@@ -72,6 +72,11 @@ int SocketInit()
     return 0;
 }
 
+int GetSocketFrames()
+{
+    return frame;
+}
+
 void Send(const char* buf)
 {
     int size = 15;
@@ -148,6 +153,10 @@ int GetInt16(std::vector<unsigned char> data, int cnt)
     return curControl;
 }
 
+void SetButtonState(int index) {
+    ControlsQueue[index].state = 1;
+}
+
 void ProcessToController(std::vector<unsigned char> data)
 {
 	int cnt =  0;
@@ -177,7 +186,7 @@ void ProcessToController(std::vector<unsigned char> data)
                     int curFrame = GetInt16(data, cnt);
                     cnt += 2;
 
-                    SocketControl socketControl = { allControls, curFrame};
+                    SocketControl socketControl = { allControls, curFrame, 0};
                     ControlsQueue.push_back(socketControl);
 				}
 				break;

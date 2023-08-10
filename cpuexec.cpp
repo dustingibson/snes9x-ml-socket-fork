@@ -252,12 +252,19 @@ void ReportToController(bool buttonPushed)
 {
 	std::vector<SocketControl> buffer = GetControlsQueue();
 	for (int i = 0; i < buffer.size(); i++) {
+		bool reportPressed = false;
 		for (int j = 0; j < buffer[i].controls.size(); j++) {
 			// Let's write
 			if (buffer[i].controls[j] == 1234) {}
-			else
-				S9xReportButton(buffer[i].controls[j], buttonPushed);
+			else {
+				if (buffer[i].state == 0) {
+					S9xReportButton(buffer[i].controls[j], buttonPushed);
+					reportPressed = true;
+				}
+			}
 		}
+		if (reportPressed)
+			SetButtonState(i);
 	}
 }
 
@@ -274,8 +281,10 @@ void ClearReportToController()
   				file.write((const char*)Memory.RAM, 65535);
 				std::cout << "WRITING" << std::endl;
 			}
-			std::cout << "UNPRESSED BUTTON" << std::endl;
-			S9xReportButton(buffer[i].controls[j], false);
+			if (buffer[i].frames <= 1) {
+				std::cout << "UNPRESSED BUTTON" << std::endl;
+				S9xReportButton(buffer[i].controls[j], false);
+			}
 		}
 	}
 	EmptyControllerQueue();
@@ -395,6 +404,12 @@ void S9xDoHEventProcessing (void)
 
 			if (CPU.V_Counter == PPU.ScreenHeight + FIRST_VISIBLE_LINE)	// VBlank starts from V=225(240).
 			{
+
+				ClearReportToController();
+				Send(FromRAMToChar());
+				Receive();
+				ReportToController(true);
+
 				S9xEndScreenRefresh();
 				#ifdef DEBUGGER
 					if (!(CPU.Flags & FRAME_ADVANCE_FLAG))
@@ -452,19 +467,13 @@ void S9xDoHEventProcessing (void)
 					S9xDoAutoJoypad();
 			}
 			if (CPU.V_Counter == FIRST_VISIBLE_LINE) {	// V=1
-				// Every 600
-				if ( /*Memory.FillRAM[0x4200] & 1*/ GetSocketFrame() % 600 == 0) {
-					//S9xReportButton(268435578, true);
-				} else {
-					//S9xReportButton(268435578, false);
-				}
-
-				ClearReportToController();
-				Send(FromRAMToChar());
-				Receive();
-				ReportToController(true);
 
 				S9xStartScreenRefresh();
+
+				// ClearReportToController();
+				// Send(FromRAMToChar());
+				// Receive();
+				// ReportToController(true);
 				
 			}
 
