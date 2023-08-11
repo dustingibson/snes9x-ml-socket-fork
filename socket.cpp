@@ -68,8 +68,12 @@ int SocketInit()
         //printf("Connected on port %i", ntohs(client.sin_port));
     }
     close(listening);
-    
     return 0;
+}
+
+void CloseSocket()
+{
+    close(ClientSocket);
 }
 
 int GetSocketFrames()
@@ -198,6 +202,9 @@ void ProcessToController(std::vector<unsigned char> data)
 				break;
 			case 100:
 				return;
+            case 404:
+                CloseSocket();
+                return;
 			case 0:
 				return;
 			default:

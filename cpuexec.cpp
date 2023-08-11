@@ -25,6 +25,7 @@
 
 static inline void S9xReschedule (void);
 int CaptureCnt = 0;
+int latchLK = 0;
 
 void S9xMainLoop (void)
 {
@@ -256,6 +257,13 @@ void ReportToController(bool buttonPushed)
 		for (int j = 0; j < buffer[i].controls.size(); j++) {
 			// Let's write
 			if (buffer[i].controls[j] == 1234) {}
+			else if (buffer[i].controls[j] == 444) {
+				latchLK = 1;
+				reportPressed = true;
+			}
+			else if (buffer[i].controls[j] == 445) {
+				latchLK = 3;
+			}
 			else {
 				if (buffer[i].state == 0) {
 					S9xReportButton(buffer[i].controls[j], buttonPushed);
@@ -265,6 +273,17 @@ void ReportToController(bool buttonPushed)
 		}
 		if (reportPressed)
 			SetButtonState(i);
+	}
+	if (latchLK == 1) {
+		//latchLK = false;
+		std::cout << "Low Kick Activated" << std::endl;
+		S9xReportButton(268435553, true);
+		latchLK = 2;
+	}
+	else if (latchLK == 3) {
+	std::cout << "Low Kick Deactivated" << std::endl;
+		S9xReportButton(268435553, false);
+		latchLK = 0;
 	}
 }
 

@@ -23,5 +23,6 @@ std::vector<SocketControl> GetControlsQueue();
 std::vector<SocketControl> UnpressedControls();
 void ReduceFrame();
 void SetButtonState(int index);
+void CloseSocket();
 
 #endif
