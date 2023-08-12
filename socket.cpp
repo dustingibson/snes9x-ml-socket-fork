@@ -167,21 +167,20 @@ void ProcessToController(std::vector<unsigned char> data)
 	while (cnt < data.size())
 	{
 		unsigned char curByte = data[cnt];
-		switch ( (int)curByte ) {
+		switch ( (int8_t)curByte ) {
 			case 1:
 			{
-				if ((int)data[cnt+1] == 2)
+				if ((uint8_t)data[cnt+1] == 2)
 				{
 					cnt++;
 				}
 				else
 				{
 					cnt++;
-					std::cout << "Detected controller!" << std::endl;
                     std::vector<int> allControls;
 
                     // Peak into the next two bytes, is it end of it or holding more buttons?
-                    while(data[cnt+2] != 2)
+                    while((uint8_t)data[cnt+2] != 2)
                     {
 					    allControls.push_back(GetInt(data, cnt));
                         cnt += 4;
@@ -193,21 +192,41 @@ void ProcessToController(std::vector<unsigned char> data)
                     SocketControl socketControl = { allControls, curFrame, 0};
                     ControlsQueue.push_back(socketControl);
 				}
-				break;
+                break;
 			}
 			case 2:
-				cnt++;
-				if ((int)data[cnt+1] == 100)
-					break;
-				break;
-			case 100:
+				if ((uint8_t)data[cnt+1] == 3)
+                {
+                    cnt++;
+                }
+                else
+                {
+                    cnt++;
+                    std::vector<int> allControls;
+
+                    // Peak into the next two bytes, is it end of it or holding more buttons?
+                    while((uint8_t)data[cnt+2] != 3)
+                    {
+					    allControls.push_back(GetInt(data, cnt));
+                        cnt += 4;
+                    }
+
+                    int curFrame = GetInt16(data, cnt);
+                    cnt += 2;
+
+                    SocketControl socketControl = { allControls, curFrame, 0};
+                    std::cout << socketControl.controls[0] << std::endl;
+                    ControlsQueue.push_back(socketControl);
+                }
+                break;
+			case 3:
 				return;
-            case 404:
+            case 4:
+                std::cout << "CLOSE SOCKET" << std::endl;
                 CloseSocket();
                 return;
-			case 0:
-				return;
 			default:
+                cnt++;
 				break;
 		}
 	}

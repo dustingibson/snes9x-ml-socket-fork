@@ -1710,11 +1710,10 @@ bool S9xMapButton (uint32 id, s9xcommand_t mapping, bool poll)
 
 void S9xReportButton (uint32 id, bool pressed)
 {
-	if (id == 4321 || id == 444 || id == 445)
+	//std::cout << id << std::endl;
+	if (id == 4321 || id == 444 || id == 445 || id == 447 || id == 448)
 		return;
 	if (pressed ) {
-		std::cout << GetSocketFrame() - LastFrame;
-		std::cout << " " + id << std::endl;
 		LastFrame = GetSocketFrame();
 	}
 	if (keymap.count(id) == 0)

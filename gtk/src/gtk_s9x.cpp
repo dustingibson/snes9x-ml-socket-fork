@@ -523,6 +523,7 @@ static void S9xCheckPointerTimer()
 /* Final exit point, issues exit (0) */
 void S9xExit()
 {
+    CloseSocket();
     gui_config->save_config_file();
 
     top_level->leave_fullscreen_mode();
