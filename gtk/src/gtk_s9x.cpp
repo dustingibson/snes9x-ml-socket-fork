@@ -4,6 +4,7 @@
    For further information, consult the LICENSE file in the root directory.
 \*****************************************************************************/
 
+#include <iostream>
 #include <stdio.h>
 #include <signal.h>
 #include "gtk_compat.h"
@@ -13,6 +14,7 @@
 #include "gtk_sound.h"
 #include "gtk_display.h"
 #include "gtk_netplay.h"
+#include "gtk_file.h"
 #include "statemanager.h"
 #include "background_particles.h"
 #include "snes9x.h"
@@ -78,6 +80,8 @@ int main(int argc, char *argv[])
 
     char *rom_filename = S9xParseArgs(argv, argc);
 
+    std::cout <<  "Loading ROM: " << rom_filename << std::endl;
+
     auto settings = Gtk::Settings::get_default();
     settings->set_property("gtk-menu-images", gui_config->enable_icons);
     settings->set_property("gtk-button-images", gui_config->enable_icons);
@@ -140,6 +144,8 @@ int main(int argc, char *argv[])
     {
         if (S9xOpenROM(rom_filename) && gui_config->full_screen_on_open)
             top_level->window->unfullscreen();
+        if (strlen(Settings.SaveStateFileName) != 0)
+            S9xLoadState(Settings.SaveStateFileName);
     }
 
     // Perform the complete fullscreen process, including mode sets, which

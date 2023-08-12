@@ -3,7 +3,7 @@
                 This file is licensed under the Snes9x License.
    For further information, consult the LICENSE file in the root directory.
 \*****************************************************************************/
-
+#include <iostream>
 #include <ctype.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
@@ -476,6 +476,11 @@ char * S9xParseArgs (char **argv, int argc)
 			if (!strcasecmp(argv[i], "-help"))
 				S9xUsage();
 			else
+			if (!strcasecmp(argv[i], "-savestate")) {
+				strncpy(Settings.SaveStateFileName, argv[++i], PATH_MAX);
+				std::cout << "Save Sate: " << Settings.SaveStateFileName << std::endl;
+			}
+			else
 
 			// SOUND OPTIONS
 
@@ -515,6 +520,7 @@ char * S9xParseArgs (char **argv, int argc)
 			else
 			if (!strcasecmp(argv[i], "-reversestereo"))
 				Settings.ReverseStereo = TRUE;
+				
 			else
 			if (!strcasecmp(argv[i], "-nostereo"))
 				Settings.Stereo = FALSE;

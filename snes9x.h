@@ -314,6 +314,8 @@ struct SSettings
 	int	OneSlowClockCycle;
 	int	TwoClockCycles;
 	int	MaxSpriteTilesPerLine;
+
+	char SaveStateFileName[PATH_MAX + 1];
 };
 
 struct SSNESGameFixes
