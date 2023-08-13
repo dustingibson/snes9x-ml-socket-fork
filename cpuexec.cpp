@@ -25,6 +25,7 @@
 
 static inline void S9xReschedule (void);
 int CaptureCnt = 0;
+bool SetRAMFlag = true;
 
 void S9xMainLoop (void)
 {
@@ -214,6 +215,17 @@ static inline void S9xReschedule (void)
 }
 
 
+void SetRAM()
+{
+	// Character Bootstrap P1
+	Memory.RAM[0x36d0] = 0x16;
+
+	// Character Boostrap P2
+	Memory.RAM[0x3894] = 0x00;
+
+	//SetRAMFlag = false;
+}
+
 
 char* FromRAMToChar()
 {
@@ -244,6 +256,10 @@ char* FromRAMToChar()
 	someChar[8] = Memory.RAM[0x36d4];
 	// P2 Health
 	someChar[9] = Memory.RAM[0x3898];
+	// P1 Wins
+	someChar[10] = Memory.RAM[0x36d0];
+	// P2 Wins
+	someChar[11] = Memory.RAM[0x36d0];
 
 	return someChar;
 }
@@ -422,6 +438,8 @@ void S9xDoHEventProcessing (void)
 				Send(FromRAMToChar());
 				Receive();
 				ReportToController(true);
+				if (SetRAMFlag)
+					SetRAM();
 
 				S9xEndScreenRefresh();
 				#ifdef DEBUGGER

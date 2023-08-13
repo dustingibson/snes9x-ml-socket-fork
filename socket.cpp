@@ -99,7 +99,7 @@ std::vector<unsigned char> Receive()
     int bytesReceived = recv(ClientSocket, buffer.data(), buffer.size(), 0);
     if (bytesReceived <= 0)
     {
-        std::cout << "Unable to receive from client" << std::endl;
+        //std::cout << "Unable to receive from client" << std::endl;
         return buffer;
     }
     ProcessToController(buffer);
