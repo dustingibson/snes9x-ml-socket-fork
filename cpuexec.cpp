@@ -25,7 +25,7 @@
 
 static inline void S9xReschedule (void);
 int CaptureCnt = 0;
-bool SetRAMFlag = true;
+bool SetRAMFlag = false;
 
 void S9xMainLoop (void)
 {
