@@ -210,7 +210,7 @@ int S9xOpenROM(const char *rom_filename)
     }
     
     S9xROMLoaded();
-    SocketInit();
+    SocketInit(Settings.MKClientPort);
     // std::string sample = "test";
     // Send(sample.c_str());
     // Receive();

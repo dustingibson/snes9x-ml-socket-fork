@@ -481,6 +481,11 @@ char * S9xParseArgs (char **argv, int argc)
 				std::cout << "Save Sate: " << Settings.SaveStateFileName << std::endl;
 			}
 			else
+			if (!strcasecmp(argv[i], "-mkport")) {
+				Settings.MKClientPort = atoi(argv[++i]);
+				std::cout << "MK Port at: " << Settings.MKClientPort << std::endl;
+			}
+			else
 
 			// SOUND OPTIONS
 

@@ -11,7 +11,7 @@ struct SocketControl {
     int state;
 };
 
-int SocketInit(void);
+int SocketInit(int);
 void Send(const char*);
 int GetSocketFrame();
 std::vector<unsigned char> Receive();

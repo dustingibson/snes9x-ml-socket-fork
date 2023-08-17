@@ -316,6 +316,7 @@ struct SSettings
 	int	MaxSpriteTilesPerLine;
 
 	char SaveStateFileName[PATH_MAX + 1];
+	int MKClientPort;
 };
 
 struct SSNESGameFixes

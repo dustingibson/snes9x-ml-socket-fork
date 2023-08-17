@@ -21,7 +21,7 @@ int ClientSocket;
 int frame = 0;
 std::vector<SocketControl> ControlsQueue;
 
-int SocketInit()
+int SocketInit(int port)
 {
     std::cout << "Initalizing socket" << std::endl;
     int listening = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,7 +32,7 @@ int SocketInit()
     }
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(54000);
+    hint.sin_port = htons(port);
     inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
 
     if (bind(listening, (sockaddr*) &hint, sizeof(hint)) == -1)
