@@ -530,7 +530,7 @@ static void S9xCheckPointerTimer()
 void S9xExit()
 {
     CloseSocket();
-    gui_config->save_config_file();
+    //gui_config->save_config_file();
 
     top_level->leave_fullscreen_mode();
 

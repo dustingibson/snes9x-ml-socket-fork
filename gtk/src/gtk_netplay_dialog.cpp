@@ -76,7 +76,7 @@ void Snes9xNetplayDialog::settings_from_dialog()
     config->netplay_max_frame_loss = get_spin("frames_behind");
     config->netplay_is_server = get_check("host_radio");
 
-    config->save_config_file();
+    //config->save_config_file();
 }
 
 bool Snes9xNetplayDialog::show()

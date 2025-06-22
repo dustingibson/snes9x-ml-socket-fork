@@ -218,10 +218,10 @@ static inline void S9xReschedule (void)
 void SetRAM()
 {
 	// Character Bootstrap P1
-	Memory.RAM[0x36d0] = 0x16;
+	Memory.RAM[0x36d0] = 0x01;
 
 	// Character Boostrap P2
-	Memory.RAM[0x3894] = 0x00;
+	Memory.RAM[0x3894] = 0x18;
 
 	//SetRAMFlag = false;
 }
@@ -248,9 +248,9 @@ char* FromRAMToChar()
 	// P2 Y
 	someChar[5] = Memory.RAM[0x2c76];
 	// P1 Ducks (States Really...)
-	someChar[6] = Memory.RAM[0x0927];
+	someChar[6] = Memory.RAM[0x8706];
 	// P2 Ducks (States Really...)
-	someChar[7] = Memory.RAM[0x0627];
+	someChar[7] = Memory.RAM[0xa706];
 	//someChar[6] = Memory.RAM[0x]
 	// P1 Health
 	someChar[8] = Memory.RAM[0x36d4];
